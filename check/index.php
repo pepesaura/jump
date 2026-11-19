@@ -32,20 +32,13 @@ $table_prefix .= $at;
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>check</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;600&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="styles.css">
+
 </head>
 <body>
-
-
-<form class="actions" method="get" action="">
-  <button type="submit" name="go" value="posts">posts</button>
-  <button type="submit" name="go" value="errores">errores</button>
-  <button type="submit" name="go" value="category">category</button>
-  <button type="submit" name="go" value="tags">tags</button>
-  <button type="submit" name="go" value="jump">jump</button>
-</form>
 <article>
 
 
@@ -59,8 +52,22 @@ if ($conn->connect_error) {
     die("Error de conexión: " . $conn->connect_error);
 }
 
+wp_url($conn, $table_prefix);
 
-$accion = $_GET['go'] ?? 'index';
+?>
+
+<!-- muestra el menú -->
+<form class="actions" method="get" action="">
+  <button type="submit" name="go" value="posts">posts</button>
+  <button type="submit" name="go" value="errores">errores</button>
+  <button type="submit" name="go" value="category">category</button>
+  <button type="submit" name="go" value="tags">tags</button>
+  <button type="submit" name="go" value="jump">jump</button>
+</form>
+
+<?php
+// muestra el menú
+$accion = $_GET['go'] ?? 'inicio';
 
 
 switch ($accion) {
@@ -104,8 +111,6 @@ $conn->close();
 //lista errores
 function wp_errores($conn, $prefijo){
     
-echo "<h1>wp_posts [ID : post_title] [zid : guid] ". date('h:i:s', time()) . "</h1>";
-
 $sql = "SELECT post_title, post_name, ID, guid, post_type 
     FROM `" . $prefijo . "posts` 
     WHERE post_type='post' and post_name != ' ' 
@@ -164,14 +169,7 @@ function wp_posts($conn, $prefijo){
     
 
 $wp_siteurl = wp_siteurl($conn, $prefijo);
-$wp_blogname = wp_blogname($conn, $prefijo);
-$enlace = "<a href='" . $wp_siteurl . "'>"  
-    . $wp_blogname
-    . "</a> ";
-
-// echo "<h1>wp_posts: ID | guid | post_title | visita: ". date('h:i:s', time()). "</h1>";
-echo "<h1>" . $enlace . "</h1>";
-
+    
 $sql = "SELECT post_title, post_name, ID, guid, post_type, post_content 
     FROM `" . $prefijo . "posts` 
     WHERE post_type='post' and post_name != ' ' 
@@ -203,16 +201,21 @@ if ($result->num_rows > 0) {
         //
 
         if($url=='')
-            $url = "@";
+            $url = "#";
 
-        $enlace = "<a href='" . $wp_siteurl . "?p=" . $row['ID'] . "'>"  
-        . $row['ID'] . ' | '
-        . $zid . ' | '
-        . $row['post_title'] . ' | '
-        . $url . ' '
-        . "</a> ";
-      echo $enlace;
-      
+        $url_post = "<a href='" . $wp_siteurl . "?p=" . $row['ID'] . "'>"  
+            . $row['post_title']
+            . "</a> ";
+
+        $url_link = "<a href='" . $url . "'>"  
+            . $url
+            . "</a> ";
+        
+        $enlace = $url_post . $url_link . " <br> ";
+
+        echo $enlace;
+
+
     }
 
  } else {
@@ -324,7 +327,6 @@ if ($result->num_rows > 0) {
 // funcion original que aprovecha las tablas de YOAST SEO
 function categoria($conn, $prefijo, $sub_type){
     
-    echo "<h1>wp_yoast_indexable: permalink, breadcrumb_title ". date('h:i:s', time()). "</h1>";
     $sql = "SELECT object_id, object_type, object_sub_type, permalink, breadcrumb_title
             FROM `" . $prefijo . "yoast_indexable` 
         WHERE object_sub_type= '$sub_type' 
@@ -352,18 +354,14 @@ function categoria($conn, $prefijo, $sub_type){
 // solamente si tienen la fila 'visita: '
 
 function wp_jump($conn, $prefijo){
-    
 
 $sql = "SELECT post_title, post_name, ID, guid, post_type, post_content 
 FROM `" . $prefijo . "posts` 
 WHERE post_type='post' and post_name != ' ' 
 ORDER BY `ID` DESC";
     
-//$sql = "SELECT post_title, post_name, guid, post_type, post_content FROM `wppi_posts` WHERE post_type='post' and guid like '%360%' and post_name != ' '";
 
-  $result = $conn->query($sql);
-
-  echo "<h1>wp_posts: visita: | post_title ". date('h:i:s', time()). " | " . $result->num_rows . "</h1>";
+$result = $conn->query($sql);
 
     
 if ($result->num_rows > 0) {
@@ -411,12 +409,11 @@ if ($result->num_rows > 0) {
 
 // busca la url del blog
 function wp_blogname($conn, $prefijo){
-
-$sql = "SELECT option_name, option_value
+    $sql = "SELECT option_name, option_value
     FROM `" . $prefijo . "options`
     WHERE option_name='blogname' "; 
 
-$result = $conn->query($sql);
+    $result = $conn->query($sql);
     while($row = $result->fetch_assoc()) {
         $resultado = $row['option_value'];
     }
@@ -425,17 +422,25 @@ return $resultado;
 
 // busca la url del blog
 function wp_siteurl($conn, $prefijo){
-
-$sql = "SELECT option_name, option_value
+    $sql = "SELECT option_name, option_value
     FROM `" . $prefijo . "options`
     WHERE option_name='siteurl' "; 
 
-$result = $conn->query($sql);
+    $result = $conn->query($sql);
     while($row = $result->fetch_assoc()) {
         $resultado = $row['option_value'];
     }
 return $resultado;
 }
+
+function wp_url($conn, $prefijo){
+    $wp_siteurl = wp_siteurl($conn, $prefijo);
+    $wp_blogname = wp_blogname($conn, $prefijo);
+    $enlace = "<a href='" . $wp_siteurl . "'>"  
+        . $wp_blogname
+        . "</a> ";
+    echo "<h1>" . $enlace . "</h1>";
+    }
 
 ?>
 
