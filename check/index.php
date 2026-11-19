@@ -169,8 +169,8 @@ $enlace = "<a href='" . $wp_siteurl . "'>"
     . $wp_blogname
     . "</a> ";
 
-echo "<h1>wp_posts: ID | guid | post_title | visita: ". date('h:i:s', time()). "</h1>";
-echo $enlace;
+// echo "<h1>wp_posts: ID | guid | post_title | visita: ". date('h:i:s', time()). "</h1>";
+echo "<h1>" . $enlace . "</h1>";
 
 $sql = "SELECT post_title, post_name, ID, guid, post_type, post_content 
     FROM `" . $prefijo . "posts` 
@@ -204,16 +204,6 @@ if ($result->num_rows > 0) {
 
         if($url=='')
             $url = "@";
-
- /*     
-      $enlace = "<a href='" . $row['guid'] . "'>"  
-        . $row['ID'] . ' | '
-        . $zid . ' | '
-        . $row['post_title'] . ' | '
-        . $url . ' '
-        . "</a> ";
-      echo $enlace;
-      */
 
         $enlace = "<a href='" . $wp_siteurl . "?p=" . $row['ID'] . "'>"  
         . $row['ID'] . ' | '
@@ -262,72 +252,6 @@ if ($result->num_rows > 0) {
 }
 
 }
-
-// consulta la tabla wp_posts
-// crea un array con los números 
-// escribe una lista con los enlaces y algunos datos útiles
-// algo falla al construir el enlace
-function jump($conn, $prefijo){
-    
-    // una consulta para llenar el array
-    // con los ID y poder llamar a uno aleatoriamente
-    $sql = "SELECT ID, guid, post_type, post_content 
-    FROM `" . $prefijo . "posts` 
-    WHERE post_type='post' and post_name != ' '";
-
-    $result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-
-    $posts_array = array();
-    while($row = $result->fetch_assoc()) {
-        $posts_array[] = $row['ID'];
-    }
-    
-    $random = rand(0,count($posts_array));
-
- } else {
-    echo "No se encontraron registros.";
-}
-
-    $sql = "SELECT ID, guid, post_content 
-    FROM `" . $prefijo . "posts` 
-    WHERE ID =" . $posts_array[$random];
-
-    echo $sql;
-
-    $result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-
-    while($row = $result->fetch_assoc()) {
-        
-        $desde = strpos($row['post_content'],'visita: <a href=');
-        
-        // si no se encuentra el enlace 
-        if($desde){
-            $hasta = strpos($row['post_content'],'>',  $desde);
-            $url = substr($row['post_content'], $desde + 16, $hasta - $desde - 16);
-            
-        } else { $url = '';}
-        
-        //
-
-        if($url!=''){
-            $url = "Location: " . $url;
-            $conn->close();
-            header($url);
-            die();
-        }
-    }
-
- } else {
-    echo "No se encontraron registros.";
-}
-
-}
-
-
 
 // consulta la tabla wp_posts
 // crea un array con los números 
