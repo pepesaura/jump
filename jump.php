@@ -1,7 +1,27 @@
 <?php
-//versión 18/11/26
+error_reporting(0);
+// jump-go15.php
+// versión 19/11/26
+?>
+<?php
+    // necesario para multisites, renombrando el archivo como jump-go15.php
+
+    $script = pathinfo(
+    basename($_SERVER['SCRIPT_NAME']),
+    PATHINFO_FILENAME);
+
+    $at = strpos($script, '-go');
+    if($at){
+        $at = substr($script, $at+3) . '_';
+    } else {$at = '';}
+?>
+
+<?php
 
 require_once __DIR__ . '/wp-config.php';
+
+// necesario para multisites, renombrando el archivo como jump-go15.php
+$table_prefix .= $at;
 
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 $conn -> set_charset("utf8");
