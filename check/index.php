@@ -53,7 +53,7 @@ if ($conn->connect_error) {
 }
 
 // el título
-$accion = $_GET['go'] ?? 'inicio';
+$accion = $_GET['go'] ?? 'posts';
 echo '<h1>> ' . wp_blogname($conn, $table_prefix) . '/' . $accion . '</h1>';
 
 ?>
@@ -69,7 +69,7 @@ echo '<h1>> ' . wp_blogname($conn, $table_prefix) . '/' . $accion . '</h1>';
 
 <?php
 // muestra el menú
-$accion = $_GET['go'] ?? 'inicio';
+$accion = $_GET['go'] ?? 'posts';
 
 
 switch ($accion) {
@@ -186,6 +186,8 @@ if ($result->num_rows > 0) {
     
     $errores = 0;
     $wp_siteurl = wp_siteurl($conn, $prefijo);
+    wp_url($conn, $prefijo);
+
 
     while($row = $result->fetch_assoc()) {
 
@@ -442,10 +444,10 @@ return $resultado;
 function wp_url($conn, $prefijo){
     $wp_siteurl = wp_siteurl($conn, $prefijo);
     $wp_blogname = wp_blogname($conn, $prefijo);
-    $enlace = "<a href='" . $wp_siteurl . "'>"  
+    $enlace = "<a href='" . $wp_siteurl . "'>> "  
         . $wp_blogname
         . "</a> ";
-    echo "<h1>" . $enlace . "</h1>";
+    echo $enlace;
     }
 
 // acorta el texto de una url demasiado larga
@@ -456,5 +458,6 @@ function pp_acorta_url($url){
     }
     return $url;
 }
+
 ?>
 
