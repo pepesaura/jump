@@ -52,7 +52,9 @@ if ($conn->connect_error) {
     die("Error de conexión: " . $conn->connect_error);
 }
 
-wp_url($conn, $table_prefix);
+// el título
+$accion = $_GET['go'] ?? 'inicio';
+echo '<h1>> ' . wp_blogname($conn, $table_prefix) . '/' . $accion . '</h1>';
 
 ?>
 
@@ -87,8 +89,11 @@ switch ($accion) {
     case 'tags':
         categoria($conn, $table_prefix,'post_tag');
         break;
-    case 'jump':
+    case 'jump_':
         wp_jump($conn, $table_prefix);
+        break;
+    case 'jump':
+        header('Location: ../jump.php'); exit;
         break;
     default:
         wp_posts($conn, $table_prefix);
@@ -207,8 +212,9 @@ if ($result->num_rows > 0) {
             . $row['post_title']
             . "</a> ";
 
+        $url_txt = pp_acorta_url($url);
         $url_link = "<a href='" . $url . "'>"  
-            . $url
+            . $url_txt
             . "</a> ";
         
         $enlace = $url_post . $url_link . " <br> ";
@@ -442,5 +448,13 @@ function wp_url($conn, $prefijo){
     echo "<h1>" . $enlace . "</h1>";
     }
 
+// acorta el texto de una url demasiado larga
+function pp_acorta_url($url){
+    $len = strlen($url);
+    if ($len > 50) {
+        $url = substr($url,0,35) . "[...]" . substr($url,$len-10,10);
+    }
+    return $url;
+}
 ?>
 
