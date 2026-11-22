@@ -2,9 +2,9 @@
   --bg: #f7f7f8;
   --text: #111827;
   --muted: #6b7280;
-  --accent: #2563eb;
+  --accent: #0073aa;
   --card: #ffffff;
-  --radius: 16px;
+  --radius: 0.375rem;
 }
 
 * {
@@ -13,10 +13,16 @@
 
 body {
   margin: 0;
+  font-size: 20px;
   /* font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; */
-  font-family: "Fira Sans", sans-serif;
+
+
+  font-family: "Archivo", sans-serif;
+  font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
 
   background: var(--bg);
   color: var(--text);
@@ -43,10 +49,14 @@ main {
 }
 
 h1 {
-  font-family: "Fira Sans", sans-serif;
+
+  font-family: "Archivo", sans-serif;
+  font-optical-sizing: auto;
   font-weight: 600;
   font-style: normal;
-  
+  font-variation-settings:
+    "wdth" 100;
+
   margin: 0 0 12px;
   font-size: clamp(2rem, 6vw, 2.75rem);
   letter-spacing: -0.02em;
@@ -62,9 +72,9 @@ a {
   flex-wrap: wrap;
   gap: 1ch;
   display: inline-block;
-  color: #0073aa;
-  border: 1px solid #0073aa;
-  border-radius: 5px;
+  color: #212529;
+  border: 1px solid #212529;
+  border-radius: 0.375rem; /* 6px */
   font-size: unset!important;
   margin-right: 5px;
   margin-top: 5px;
@@ -84,11 +94,11 @@ a {
 .actions button {
   padding: 10px 20px;
   border: 1px solid transparent;
-  border-radius: 2px;
+  border-radius: 0px;
   background: #eef2ff;
   color: var(--accent);
   font: inherit;
-  font-weight: 600;
+  font-weight: 400;
   cursor: pointer;
   transition: background .15s ease, transform .15s ease, box-shadow .15s ease;
 }
