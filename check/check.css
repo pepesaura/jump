@@ -1,0 +1,132 @@
+:root {
+  --bg: #f7f7f8; /* f7f7f8 */
+  --text: #212529; /* 111827 */
+  --muted: #6b7280;
+  --accent: #212529; /* #0073aa; */
+  --card: #ffffff;
+  --radius: 0.375rem;
+
+  --hover-bg: #f8fafc;
+  --border-color: #e2e8f0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-size: 20px;
+  /* font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; */
+
+
+  font-family: "Archivo", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  display: grid;
+  place-items: stretch;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+h1 {
+
+  font-family: "Archivo", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+
+  margin: 0 0 12px;
+  font-size: clamp(2rem, 6vw, 2.75rem);
+  letter-spacing: -0.02em;
+}
+
+p {
+  margin: 0 0 28px;
+  color: var(--muted);
+}
+
+a {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1ch;
+  display: inline-block;
+  
+  color: var(--text);
+  background-color: var(--bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+
+  font-size: unset!important;
+  margin-right: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 1ch 2ch;
+  text-decoration: none!important;
+
+}
+
+a:hover {
+  background-color: var(--hover-bg);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px); /* Pequeña elevación */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  gap: 10px;
+  margin: 0 0 32px;
+}
+
+.actions button {
+  padding: 10px 20px;
+  border: 1px solid var(--accent);
+  /*border-radius: 0px;*/
+  background: var(--accent);
+  color: white;
+  font: inherit;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+
+.actions button:hover,
+.actions button:focus-visible {
+  background: var(--bg); /* eef2ff */
+  color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, .2);
+}
+
+.actions button:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, .3);
+  outline-offset: 2px;
+}
+
+article { 
+  display: block; 
+  text-align: left; 
+  width: 90%;
+  max-width: 80%;
+  overflow-x: clip; /* solo si sabes que el contenido puede sobresalir */
+
+}
+
+footer {
+  margin-top: 32px;
+  font-size: .875rem;
+  color: var(--muted);
+}
